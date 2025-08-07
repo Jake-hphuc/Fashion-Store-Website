@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NOIR VOYAGE</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: 'Segoe UI', sans-serif; }
+    .carousel-item video {
+      width: 100%;
+      height: 100vh;
+      object-fit: cover;
+    }
+    .hero-overlay {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.4);
+      z-index: 1;
+    }
+    .carousel-caption {
+      z-index: 2;
+      bottom: 30%;
+      transform: translateY(50%);
+      text-shadow: 0 0 8px #000;
+    }
+    .carousel-caption h1 {
+      font-size: 3rem;
+      font-weight: bold;
+      color: #fff;
+    }
+    .carousel-caption p {
+      font-size: 1.3rem;
+      color: #ddd;
+    }
+    .navbar-brand {
+      font-weight: 700;
+      font-size: 1.5rem;
+    }
+    .navbar {
+      position: absolute;
+      top: 0;
+      width: 100%;
+      z-index: 9999;
+      background: rgba(255, 255, 255, 0.8);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">NOIR VOYAGE</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link" href="thoitrang.html">Trang chủ</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Video Carousel -->
+  <div id="heroCarousel" class="carousel slide position-relative" data-bs-ride="carousel">
+    <div class="hero-overlay"></div>
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <video autoplay muted loop playsinline>
+          <source src="web 2.mp4" type="video/mp4">
+        </video>
+        <div class="carousel-caption">
+          <h1>Biểu tượng thanh lịch vượt thời gian</h1>
+          <p>Vẻ đẹp cổ điển, tinh tế của phái đẹp hiện đại.</p>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <video autoplay muted loop playsinline>
+          <source src="web 3.mp4" type="video/mp4">
+        </video>
+        <div class="carousel-caption">
+          <h1>Hành trình của di sản</h1>
+          <p>Thương hiệu định nghĩa sự xa xỉ và khám phá không ngừng.</p>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <video autoplay muted loop playsinline>
+          <source src="web 4.mp4" type="video/mp4">
+        </video>
+        <div class="carousel-caption">
+          <h1>Nghệ thuật của sự im lặng</h1>
+          <p>Phong cách menswear đậm chất Ý, trầm lặng mà cuốn hút.</p>
+        </div>
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon"></span>
+    </button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+
+
+

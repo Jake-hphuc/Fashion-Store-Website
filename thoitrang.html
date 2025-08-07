@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NOIR VOYAGE</title>
+  <link rel="icon" href="https://scontent.fsgn2-6.fna.fbcdn.net/v/t39.30808-6/516495766_1041548721498501_1119491404920701826_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=pSJEVSJlEZ8Q7kNvwGTIA5M&_nc_oc=Adl3Nf9OdJ5hvNAWctX43fsjMyBQmiZHWuPQn8U1T6ZoexZBwec1Mos8yGNjpwU9MnM&_nc_zt=23&_nc_ht=scontent.fsgn2-6.fna&_nc_gid=jyo9rka9xHXw4jtzt8Yylw&oh=00_AfTeDQxrwLIihJmHQIIMcok_9-O758XushLIHYBCmTEXuQ&oe=688E4775" type="image">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Playfair Display', serif;
+      background-color: #f9f9f9;
+    }
+
+    .navbar-brand {
+      font-weight: 600;
+      font-size: 1.5rem;
+    }
+
+    .logo {
+      height: 40px;
+    }
+
+    .hero {
+      background: url('https://scontent.fhan20-1.fna.fbcdn.net/v/t39.30808-6/525355729_1058569616463078_6608143778830887422_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=833d8c&_nc_ohc=VZhVFZKNy3YQ7kNvwE3bPeT&_nc_oc=AdkwgbSw0lB6AX_W0x2IQUHbt_OEuEbixKG8gfKkUW_208g9QfCNrD0s1ASSnaT8CK0&_nc_zt=23&_nc_ht=scontent.fhan20-1.fna&_nc_gid=T4zkOVJFr3fNXBXzb3y4bA&oh=00_AfSjxdNNCz3qiEUTWjCVrYLnOMvD0XQjEmw17auqhsSiZw&oe=688E4743') no-repeat center center/cover;
+      height: 85vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: white;
+      padding: 2rem;
+    }
+
+    .hero h1 {
+      font-size: 3.2rem;
+      background: rgba(0,0,0,0.6);
+      padding: 1.5rem 3rem;
+      border-radius: 12px;
+    }
+
+    .section-title {
+      font-size: 2.2rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: bold;
+    }
+
+    .card-img-top {
+      height: 360px;
+      object-fit: cover;
+    }
+
+    .social-icons a {
+      font-size: 1.5rem;
+      color: white;
+      margin: 0 10px;
+      transition: 0.3s;
+    }
+
+    .social-icons a:hover {
+      color: #ccc;
+    }
+
+    .btn-dark {
+      border-radius: 30px;
+      padding: 0.5rem 1.5rem;
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center" href="thoitrang.html">
+      <img src="https://scontent.fsgn2-6.fna.fbcdn.net/v/t39.30808-6/516495766_1041548721498501_1119491404920701826_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=BGezwEx9jw8Q7kNvwGEGhBQ&_nc_oc=AdlxO5NufWI2VzhS_e12RoWC6XpBKd5kh4d3i6MA5QYi5NnfyDRZHZ99_6n4noaNCPA&_nc_zt=23&_nc_ht=scontent.fsgn2-6.fna&_nc_gid=xabzeRay56pYlC5KpxwZBw&oh=00_AfX80b7lcdc_ByIMmhkk6jeNB-Hjg669VZQUktV8v9gfrw&oe=6898D375" 
+           alt="NOIR VOYAGE Logo" class="logo me-2" height="40">
+      <span class="fw-bold">NOIR VOYAGE</span>
+    </a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto align-items-center">
+        <li class="nav-item"><a class="nav-link" href="index.html">Video</a></li>
+        <li class="nav-item"><a class="nav-link" href="about.html">Giới Thiệu</a></li>
+        <li class="nav-item"><a class="nav-link" href="brand-story.html">Câu Chuyện</a></li>
+        <li class="nav-item"><a class="nav-link" href="collections.html">Bộ Sưu Tập</a></li>
+        <li class="nav-item"><a class="nav-link" href="product.html">Sản Phẩm</a></li>
+        <li class="nav-item"><a class="nav-link" href="contact.html">Liên Hệ</a></li>
+        <li class="nav-item">
+          <a class="nav-link position-relative" href="cart.html">
+            <i class="bi bi-cart"></i> Giỏ Hàng
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="btn btn-outline-dark btn-sm ms-2 d-flex align-items-center" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">
+            <i class="bi bi-person-circle me-1"></i> Đăng Nhập
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<!-- Modal Đăng Nhập / Đăng Ký -->
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content p-3">
+      <div class="modal-header">
+        <h5 class="modal-title" id="loginModalLabel">Tài Khoản</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" id="authTab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="login-tab" data-bs-toggle="tab" data-bs-target="#login" type="button" role="tab">Đăng Nhập</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="register-tab" data-bs-toggle="tab" data-bs-target="#register" type="button" role="tab">Đăng Ký</button>
+          </li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content pt-3">
+          <!-- Đăng nhập -->
+          <div class="tab-pane fade show active" id="login" role="tabpanel">
+            <form>
+              <div class="mb-3">
+                <label for="loginEmail" class="form-label">Email</label>
+                <input type="email" class="form-control" id="loginEmail" required>
+              </div>
+              <div class="mb-3">
+                <label for="loginPassword" class="form-label">Mật khẩu</label>
+                <input type="password" class="form-control" id="loginPassword" required>
+              </div>
+              <button type="submit" class="btn btn-dark w-100">Đăng Nhập</button>
+            </form>
+          </div>
+
+          <!-- Đăng ký -->
+          <div class="tab-pane fade" id="register" role="tabpanel">
+            <form>
+              <div class="mb-3">
+                <label for="registerName" class="form-label">Họ và Tên</label>
+                <input type="text" class="form-control" id="registerName" required>
+              </div>
+              <div class="mb-3">
+                <label for="registerEmail" class="form-label">Email</label>
+                <input type="email" class="form-control" id="registerEmail" required>
+              </div>
+              <div class="mb-3">
+                <label for="registerPassword" class="form-label">Mật khẩu</label>
+                <input type="password" class="form-control" id="registerPassword" required>
+              </div>
+              <button type="submit" class="btn btn-outline-dark w-100">Tạo Tài Khoản</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <h1>Vẻ đẹp của sự tối giản và tinh tế</h1>
+</section>
+
+<style>
+.hero {
+  background-image: url('https://scontent.fsgn8-1.fna.fbcdn.net/v/t39.30808-6/525355729_1058569616463078_6608143778830887422_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeGBC2Tr5EUTSCL2-hrGL7BxeRVdPnCU0G55FV0-cJTQbixqD5csqKg4QYfc5lEPpyYxHys7b40Ox_SzS41dNSfA&_nc_ohc=TSAUShvdRiwQ7kNvwE3Y3__&_nc_oc=AdkmspmsDKEmlnD3N26MB6-dhpkrVtzehuRZnGbx6_SNKDZjqYo4SApC4nJd5g7f7w0IUqMZHg3giy1IMMn0sNFK&_nc_zt=23&_nc_ht=scontent.fsgn8-1.fna&_nc_gid=mWzql16N-uHy4d2UW_iUVQ&oh=00_AfUP1gIIZVlC1cgn2UZDn9yQfRT4u-NgzPyL2Cq3rUn4Xw&oe=6898D343');
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: white;
+}
+</style>
+
+
+
+<!-- VIDEO BACKGROUND + ABOUT + BRAND STORY -->
+<section class="position-relative overflow-hidden">
+
+  <!-- VIDEO NỀN CHẠY XUYÊN SUỐT -->
+  <video autoplay muted loop playsinline class="position-absolute w-100 h-100 object-fit-cover" style="z-index: 0; top: 0; left: 0;">
+    <source src="web 1.mp4" type="video/mp4">
+    Trình duyệt của bạn không hỗ trợ video.
+  </video>
+
+  <!-- NỘI DUNG PHỦ TRÊN VIDEO -->
+  <div class="position-relative" style="z-index: 1; color: white; text-shadow: 0 0 6px black;">
+    <!-- ABOUT -->
+    <section id="about" class="container py-5">
+      <h2 class="section-title">Giới Thiệu</h2>
+      <p class="text-center">Khám phá Noir Voyage - thương hiệu thời trang mang triết lý quiet luxury, nơi thủ công tinh xảo và phong cách tối giản lên ngôi.</p>
+      <div class="text-center">
+        <a href="about.html" class="btn btn-outline-light">Tìm hiểu thêm</a>
+      </div>
+    </section>
+
+    <!-- BRAND STORY -->
+    <section id="brand-story-teaser" class="container py-5">
+      <h2 class="section-title">Câu Chuyện Thương Hiệu</h2>
+      <p class="text-center">Hành trình của sự tĩnh lặng và đẳng cấp, nơi từng đường may và chất liệu đều kể một câu chuyện tinh tế.</p>
+      <div class="text-center">
+        <a href="brand-story.html" class="btn btn-outline-light">Đọc tiếp</a>
+      </div>
+    </section>
+  </div>
+
+</section>
+
+
+  <!-- COLLECTIONS -->
+  <section id="products" class="container py-5">
+    <h2 class="section-title">Bộ Sưu Tập Nổi Bật</h2>
+    <div class="row g-4">
+      <!-- Card 1 -->
+      <div class="col-md-4">
+        <div class="card border-0 shadow-sm">
+          <img src="https://file.hstatic.net/200000456445/file/ollection-campaign-images-2-1200x1235_a098fc64d0034135a27d28bebeedebc6_2048x2048.jpg" class="card-img-top" alt="Collection 1">
+          <div class="card-body text-center">
+            <h5 class="card-title">Thu Đông 2025</h5>
+            <a href="thu-dong-2025.html" class="btn btn-dark">Xem bộ sưu tập</a>
+          </div>
+        </div>
+      </div>
+      <!-- Card 2 -->
+      <div class="col-md-4">
+        <div class="card border-0 shadow-sm">
+          <img src="https://file.hstatic.net/200000456445/file/cover-artikel-84-scaled_1afc1a1d5f424e71afbbc6ca648738ad_2048x2048.jpg" class="card-img-top" alt="Collection 2">
+          <div class="card-body text-center">
+            <h5 class="card-title">Xuân Hè 2025</h5>
+            <a href="xuan-he-2025.html" class="btn btn-dark">Xem bộ sưu tập</a>
+          </div>
+        </div>
+      </div>
+      <!-- Card 3 -->
+      <div class="col-md-4">
+        <div class="card border-0 shadow-sm">
+          <img src="https://stylemagazine.vn/wp-content/uploads/LV-FALL-CAPSULE-2025-CAMPAIGN-3.jpg" class="card-img-top" alt="Essentials">
+          <div class="card-body text-center">
+            <h5 class="card-title">Noir Essentials</h5>
+            <a href="noir-essentials.html" class="btn btn-dark">Xem bộ sưu tập</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+<!-- COLLECTION CATEGORIES -->
+<section class="container py-5">
+  <h2 class="section-title">Khám Phá Các Dòng Bộ Sưu Tập</h2>
+  <div class="row text-center">
+    <div class="col-md-4 mb-3">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body d-flex flex-column justify-content-center">
+          <h5 class="card-title">Runway Elegance</h5>
+          <p class="card-text">Sự thanh lịch trên từng bước chân sàn diễn.</p>
+          <a href="runway.html" class="btn btn-outline-dark mt-auto">Khám phá</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 mb-3">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body d-flex flex-column justify-content-center">
+          <h5 class="card-title">Timeless Silhouettes</h5>
+          <p class="card-text">Thiết kế vượt thời gian, phong cách không lỗi mốt.</p>
+          <a href="timeless.html" class="btn btn-outline-dark mt-auto">Khám phá</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 mb-3">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body d-flex flex-column justify-content-center">
+          <h5 class="card-title">Modern Classics</h5>
+          <p class="card-text">Tinh thần hiện đại kết hợp nét cổ điển sang trọng.</p>
+          <a href="modern.html" class="btn btn-outline-dark mt-auto">Khám phá</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+  <!-- FEATURED PRODUCTS -->
+  <section class="container py-5">
+    <h2 class="section-title">Sản Phẩm Nổi Bật</h2>
+    <div class="row g-4">
+      <div class="col-md-3">
+        <div class="card border-0 shadow-sm">
+          <img src="https://media.loropiana.com/PRODUCTS/HYBRIS/FAI/FAI8133/J1YI/FR/DE3D6ABF-D591-4382-9A45-6CC7941E2BC7_FAI8133_J1YI_MEDIUM.jpg" class="card-img-top" alt="Áo khoác">
+          <div class="card-body text-center">
+            <h6 class="card-title">Áo khoác Cashmere</h6>
+            <p class="text-muted">19.500.000₫</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card border-0 shadow-sm">
+          <img src="https://media.loropiana.com/HYBRIS/FAQ/FAQ1981/054DD1B7-8CA9-4CA3-A2B5-98B490D6E96C/FAQ1981_1230_MEDIUM.jpg?sw=620&sh=868" class="card-img-top" alt="Sơ mi">
+          <div class="card-body text-center">
+            <h6 class="card-title">Sơ mi Linen trắng</h6>
+            <p class="text-muted">14.200.000₫</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card border-0 shadow-sm">
+          <img src="https://media.loropiana.com/HYBRIS/FAQ/FAQ0873/5EC649BC-61C3-4B3A-81D0-48EAFF9A1B01/FAQ0873_M0WX_MEDIUM.jpg" class="card-img-top" alt="Trousers">
+          <div class="card-body text-center">
+            <h6 class="card-title">Quần tây tailored</h6>
+            <p class="text-muted">16.800.000₫</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card border-0 shadow-sm">
+          <img src="https://media.loropiana.com/HYBRIS/FAP/FAP4796/16D13ADD-253C-430F-9A58-65AE8780D677/FAP4796_706F_MEDIUM.jpg" class="card-img-top" alt="Túi da">
+          <div class="card-body text-center">
+            <h6 class="card-title">Túi xách da bê</h6>
+            <p class="text-muted">38.000.000₫</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="text-center py-4 bg-dark text-light">
+    <div class="social-icons mb-3">
+      <a href="https://www.facebook.com/share/16j2czsGww/?mibextid=wwXIfr" target="_blank"><i class="bi bi-facebook"></i></a>
+      <a href="https://www.instagram.com/jake.hphuc/" target="_blank"><i class="bi bi-instagram"></i></a>
+      <a href="https://tiktok.com/@noir.voyage" target="_blank"><i class="bi bi-tiktok"></i></a>
+    </div>
+    <p>&copy; 2025 Noir Voyage. All rights reserved.</p>
+  </footer>
+<!-- Modal Đăng Nhập / Đăng Ký -->
+<div class="modal fade" id="authModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="authModalLabel">Tài Khoản NOIR VOYAGE</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs mb-3" id="authTabs" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="login-tab" data-bs-toggle="tab" data-bs-target="#loginTab" type="button" role="tab">Đăng Nhập</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="register-tab" data-bs-toggle="tab" data-bs-target="#registerTab" type="button" role="tab">Đăng Ký</button>
+          </li>
+        </ul>
+
+        <!-- Tab nội dung -->
+        <div class="tab-content" id="authTabsContent">
+          <!-- Đăng Nhập -->
+          <div class="tab-pane fade show active" id="loginTab" role="tabpanel">
+            <form>
+              <div class="mb-3">
+                <input type="email" class="form-control" placeholder="Email" required>
+              </div>
+              <div class="mb-3">
+                <input type="password" class="form-control" placeholder="Mật khẩu" required>
+              </div>
+              <button type="submit" class="btn btn-dark w-100">Đăng Nhập</button>
+            </form>
+          </div>
+
+          <!-- Đăng Ký -->
+          <div class="tab-pane fade" id="registerTab" role="tabpanel">
+            <form>
+              <div class="mb-3">
+                <input type="text" class="form-control" placeholder="Họ và Tên" required>
+              </div>
+              <div class="mb-3">
+                <input type="email" class="form-control" placeholder="Email" required>
+              </div>
+              <div class="mb-3">
+                <input type="password" class="form-control" placeholder="Mật khẩu" required>
+              </div>
+              <button type="submit" class="btn btn-success w-100">Đăng Ký</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

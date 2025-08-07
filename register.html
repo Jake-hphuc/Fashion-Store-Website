@@ -1,0 +1,57 @@
+<!-- ===================== File: register.html ===================== -->
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Đăng Ký | NOIR VOYAGE</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+  <style>
+    body { background: #f4f4f4; font-family: 'Playfair Display', serif; }
+    .register-box {
+      max-width: 400px;
+      margin: 100px auto;
+      background: #fff;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+    .register-box h2 { text-align: center; margin-bottom: 30px; }
+    .btn-success { border-radius: 25px; }
+  </style>
+</head>
+<body>
+      <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">NOIR VOYAGE</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="thoitrang.html">Trang Chủ</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <div class="register-box">
+    <h2>Đăng Ký</h2>
+    <form action="/register" method="POST">
+      <div class="mb-3">
+        <input type="text" name="name" class="form-control" placeholder="Họ và tên" required>
+      </div>
+      <div class="mb-3">
+        <input type="email" name="email" class="form-control" placeholder="Email" required>
+      </div>
+      <div class="mb-3">
+        <input type="password" name="password" class="form-control" placeholder="Mật khẩu" required>
+      </div>
+      <button type="submit" class="btn btn-success w-100">Đăng Ký</button>
+    </form>
+  </div>
+</body>
+</html>
