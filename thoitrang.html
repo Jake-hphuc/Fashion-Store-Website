@@ -350,6 +350,91 @@
     <p>&copy; 2025 Noir Voyage. All rights reserved.</p>
   </footer>
 <!-- Modal Đăng Nhập / Đăng Ký -->
+ <script>
+  // Lấy dữ liệu người dùng từ localStorage (nếu có)
+  let users = JSON.parse(localStorage.getItem('users')) || [
+    { email: "admin@noir.com", password: "admin123", role: "admin" },
+    { email: "user@noir.com", password: "user123", role: "user" }
+  ];
+
+  // Lưu lại nếu chưa có trong lần đầu
+  localStorage.setItem("users", JSON.stringify(users));
+
+  // ==== XỬ LÝ ĐĂNG NHẬP ====
+  document.querySelector('#loginTab form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const email = this.querySelector('input[type="email"]').value;
+    const password = this.querySelector('input[type="password"]').value;
+
+    const user = users.find(u => u.email === email && u.password === password);
+    if (user) {
+      sessionStorage.setItem("loggedInUser", JSON.stringify(user));
+      alert("Đăng nhập thành công!");
+
+      // Reload trang để cập nhật giao diện
+      location.reload();
+    } else {
+      alert("Email hoặc mật khẩu không đúng!");
+    }
+  });
+
+  // ==== XỬ LÝ ĐĂNG KÝ ====
+  document.querySelector('#registerTab form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const name = this.querySelector('input[type="text"]').value;
+    const email = this.querySelector('input[type="email"]').value;
+    const password = this.querySelector('input[type="password"]').value;
+
+    const userExists = users.some(u => u.email === email);
+    if (userExists) {
+      alert("Email đã được đăng ký!");
+      return;
+    }
+
+    const newUser = { email, password, role: "user", name };
+    users.push(newUser);
+    localStorage.setItem("users", JSON.stringify(users));
+    alert("Đăng ký thành công! Vui lòng đăng nhập.");
+
+    // Chuyển sang tab đăng nhập
+    const loginTab = new bootstrap.Tab(document.querySelector('#login-tab'));
+    loginTab.show();
+  });
+
+  // ==== CẬP NHẬT GIAO DIỆN KHI ĐÃ ĐĂNG NHẬP ====
+  const loggedInUser = JSON.parse(sessionStorage.getItem("loggedInUser"));
+  if (loggedInUser) {
+    // Hiện nút Admin nếu là admin
+    const adminLink = document.createElement("li");
+    adminLink.classList.add("nav-item");
+    adminLink.innerHTML = `<a class="nav-link" href="admin.html">Quản lý (Admin)</a>`;
+    if (loggedInUser.role === "admin") {
+      document.querySelector(".navbar-nav").appendChild(adminLink);
+    }
+
+    // Hiện tên và nút đăng xuất
+    const userInfo = document.createElement("li");
+    userInfo.classList.add("nav-item", "dropdown");
+    userInfo.innerHTML = `
+      <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+        👤 ${loggedInUser.name || loggedInUser.email}
+      </a>
+      <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="#" id="logoutBtn">Đăng xuất</a></li>
+      </ul>
+    `;
+    document.querySelector(".navbar-nav").appendChild(userInfo);
+  }
+
+  // ==== ĐĂNG XUẤT ====
+  document.addEventListener("click", function (e) {
+    if (e.target.id === "logoutBtn") {
+      sessionStorage.removeItem("loggedInUser");
+      location.reload();
+    }
+  });
+</script>
+
 <div class="modal fade" id="authModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
