@@ -103,11 +103,7 @@
             <i class="bi bi-cart"></i> Giỏ Hàng
           </a>
         </li>
-        <li class="nav-item">
-          <a class="btn btn-outline-dark btn-sm ms-2 d-flex align-items-center" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">
-            <i class="bi bi-person-circle me-1"></i> Đăng Nhập
-          </a>
-        </li>
+       
       </ul>
     </div>
   </div>
@@ -349,92 +345,147 @@
     </div>
     <p>&copy; 2025 Noir Voyage. All rights reserved.</p>
   </footer>
-<!-- Modal Đăng Nhập / Đăng Ký -->
- <script>
-  // Lấy dữ liệu người dùng từ localStorage (nếu có)
+<!-- Modal Đăng Nhập / Đăng Ký (bao gồm nút Google + Apple mô phỏng) -->
+<script>
+  // Lấy dữ liệu người dùng từ localStorage (nếu có), kèm account mặc định
   let users = JSON.parse(localStorage.getItem('users')) || [
-    { email: "admin@noir.com", password: "admin123", role: "admin" },
-    { email: "user@noir.com", password: "user123", role: "user" }
+    { email: "admin@noir.com", password: "admin123", role: "admin", name: "Admin Noir" },
+    { email: "user@noir.com", password: "user123", role: "user", name: "Người Dùng" }
   ];
-
-  // Lưu lại nếu chưa có trong lần đầu
   localStorage.setItem("users", JSON.stringify(users));
 
-  // ==== XỬ LÝ ĐĂNG NHẬP ====
-  document.querySelector('#loginTab form').addEventListener('submit', function (e) {
-    e.preventDefault();
-    const email = this.querySelector('input[type="email"]').value;
-    const password = this.querySelector('input[type="password"]').value;
+  // Hàm mô phỏng đăng nhập xã hội (Google / Apple)
+  function socialLogin(provider) {
+    // provider = 'google' | 'apple'
+    const providerName = provider === 'google' ? 'Google' : 'Apple';
+    // tạo email giả, tên hiển thị
+    const email = `${provider}@noir.social`;
+    const name = `${providerName} User`;
+    // nếu chưa tồn tại user trong users thì thêm vào (role: user)
+    let existing = users.find(u => u.email === email);
+    if (!existing) {
+      const newUser = { email, password: '', role: 'user', name, provider };
+      users.push(newUser);
+      localStorage.setItem('users', JSON.stringify(users));
+      existing = newUser;
+    }
+    // đăng nhập (lưu session)
+    sessionStorage.setItem('loggedInUser', JSON.stringify(existing));
+    alert(`Đăng nhập bằng ${providerName} (mô phỏng) thành công!`);
+    // reload để cập nhật giao diện (hiển thị tên, admin link nếu admin)
+    location.reload();
+  }
 
-    const user = users.find(u => u.email === email && u.password === password);
-    if (user) {
-      sessionStorage.setItem("loggedInUser", JSON.stringify(user));
-      alert("Đăng nhập thành công!");
+  // ==== XỬ LÝ ĐĂNG NHẬP BẰNG FORM ==== 
+  document.addEventListener('DOMContentLoaded', () => {
+    const loginForm = document.querySelector('#loginTab form');
+    if (loginForm) {
+      loginForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const email = this.querySelector('input[type="email"]').value.trim();
+        const password = this.querySelector('input[type="password"]').value;
+        const user = users.find(u => u.email === email && u.password === password);
+        if (user) {
+          sessionStorage.setItem("loggedInUser", JSON.stringify(user));
+          alert("Đăng nhập thành công!");
+          location.reload();
+        } else {
+          alert("Email hoặc mật khẩu không đúng!");
+        }
+      });
+    }
 
-      // Reload trang để cập nhật giao diện
-      location.reload();
+    // ==== XỬ LÝ ĐĂNG KÝ ====
+    const registerForm = document.querySelector('#registerTab form');
+    if (registerForm) {
+      registerForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const name = this.querySelector('input[type="text"]').value.trim();
+        const email = this.querySelector('input[type="email"]').value.trim();
+        const password = this.querySelector('input[type="password"]').value;
+        if (!name || !email || !password) {
+          alert('Vui lòng điền đầy đủ thông tin.');
+          return;
+        }
+        const userExists = users.some(u => u.email === email);
+        if (userExists) {
+          alert("Email đã được đăng ký!");
+          return;
+        }
+        const newUser = { email, password, role: "user", name };
+        users.push(newUser);
+        localStorage.setItem("users", JSON.stringify(users));
+        alert("Đăng ký thành công! Vui lòng đăng nhập.");
+        // Chuyển sang tab đăng nhập
+        const loginTab = new bootstrap.Tab(document.querySelector('#login-tab'));
+        loginTab.show();
+      });
+    }
+
+    // ==== CẬP NHẬT GIAO DIỆN KHI ĐÃ ĐĂNG NHẬP ====
+    updateNavForLoggedUser();
+  });
+
+  // Hàm cập nhật nav (tách ra để gọi khi cần)
+  function updateNavForLoggedUser() {
+    const loggedInUser = JSON.parse(sessionStorage.getItem("loggedInUser"));
+    const nav = document.querySelector(".navbar-nav");
+    if (!nav) return;
+
+    // tránh thêm nhiều lần
+    const existingUserElem = nav.querySelector('.nav-user-item');
+    const existingAdminElem = nav.querySelector('.nav-admin-item');
+    if (existingUserElem) existingUserElem.remove();
+    if (existingAdminElem) existingAdminElem.remove();
+
+    if (loggedInUser) {
+      // Admin link (nếu role === admin)
+      if (loggedInUser.role === "admin") {
+        const adminLink = document.createElement("li");
+        adminLink.classList.add("nav-item", "nav-admin-item");
+        adminLink.innerHTML = `<a class="nav-link" href="admin.html">Quản lý (Admin)</a>`;
+        nav.appendChild(adminLink);
+      }
+
+      // Thông tin user + logout
+      const userInfo = document.createElement("li");
+      userInfo.classList.add("nav-item", "dropdown", "nav-user-item");
+      userInfo.innerHTML = `
+        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+          👤 ${loggedInUser.name || loggedInUser.email}
+        </a>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="#" id="logoutBtn">Đăng xuất</a></li>
+        </ul>
+      `;
+      nav.appendChild(userInfo);
     } else {
-      alert("Email hoặc mật khẩu không đúng!");
+      // nếu chưa đăng nhập: thêm nút mở modal nếu chưa có
+      if (!nav.querySelector('.nav-auth-item')) {
+        const li = document.createElement('li');
+        li.classList.add('nav-item', 'nav-auth-item');
+        li.innerHTML = `<a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#authModal">Đăng nhập</a>`;
+        nav.appendChild(li);
+      }
     }
-  });
-
-  // ==== XỬ LÝ ĐĂNG KÝ ====
-  document.querySelector('#registerTab form').addEventListener('submit', function (e) {
-    e.preventDefault();
-    const name = this.querySelector('input[type="text"]').value;
-    const email = this.querySelector('input[type="email"]').value;
-    const password = this.querySelector('input[type="password"]').value;
-
-    const userExists = users.some(u => u.email === email);
-    if (userExists) {
-      alert("Email đã được đăng ký!");
-      return;
-    }
-
-    const newUser = { email, password, role: "user", name };
-    users.push(newUser);
-    localStorage.setItem("users", JSON.stringify(users));
-    alert("Đăng ký thành công! Vui lòng đăng nhập.");
-
-    // Chuyển sang tab đăng nhập
-    const loginTab = new bootstrap.Tab(document.querySelector('#login-tab'));
-    loginTab.show();
-  });
-
-  // ==== CẬP NHẬT GIAO DIỆN KHI ĐÃ ĐĂNG NHẬP ====
-  const loggedInUser = JSON.parse(sessionStorage.getItem("loggedInUser"));
-  if (loggedInUser) {
-    // Hiện nút Admin nếu là admin
-    const adminLink = document.createElement("li");
-    adminLink.classList.add("nav-item");
-    adminLink.innerHTML = `<a class="nav-link" href="admin.html">Quản lý (Admin)</a>`;
-    if (loggedInUser.role === "admin") {
-      document.querySelector(".navbar-nav").appendChild(adminLink);
-    }
-
-    // Hiện tên và nút đăng xuất
-    const userInfo = document.createElement("li");
-    userInfo.classList.add("nav-item", "dropdown");
-    userInfo.innerHTML = `
-      <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-        👤 ${loggedInUser.name || loggedInUser.email}
-      </a>
-      <ul class="dropdown-menu">
-        <li><a class="dropdown-item" href="#" id="logoutBtn">Đăng xuất</a></li>
-      </ul>
-    `;
-    document.querySelector(".navbar-nav").appendChild(userInfo);
   }
 
   // ==== ĐĂNG XUẤT ====
   document.addEventListener("click", function (e) {
-    if (e.target.id === "logoutBtn") {
+    if (e.target && e.target.id === "logoutBtn") {
       sessionStorage.removeItem("loggedInUser");
+      // làm mới nav
+      updateNavForLoggedUser();
       location.reload();
+    }
+    // support clicking social demo buttons if they are <button data-provider="...">
+    if (e.target && e.target.dataset && e.target.dataset.provider) {
+      socialLogin(e.target.dataset.provider);
     }
   });
 </script>
 
+<!-- Modal HTML -->
 <div class="modal fade" id="authModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -457,6 +508,27 @@
         <div class="tab-content" id="authTabsContent">
           <!-- Đăng Nhập -->
           <div class="tab-pane fade show active" id="loginTab" role="tabpanel">
+            <!-- Social Login (mô phỏng) -->
+            <div class="d-grid gap-2 mb-3">
+              <button type="button" class="btn btn-light border" data-provider="google" style="display:flex;align-items:center;justify-content:center;gap:.6rem;">
+                <!-- simple Google icon -->
+                <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#EA4335" d="M21.35 11.1h-9.2v2.9h5.3c-.23 1.4-1.4 4.1-5.3 4.1-3.2 0-5.8-2.7-5.8-6s2.6-6 5.8-6c1.8 0 3 0.8 3.7 1.5l2.5-2.3C16.2 4 14.4 3 11.9 3 6.95 3 3 6.95 3 12s3.95 9 8.95 9c5.15 0 8.6-3.6 8.6-8.6 0-.6-.05-1.05-.2-1.3z"/></svg>
+                Đăng nhập với Google 
+              </button>
+              <button type="button" class="btn btn-dark text-white" data-provider="apple" style="display:flex;align-items:center;justify-content:center;gap:.6rem;">
+                <!-- simple Apple icon -->
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M16.365 1.43c.06 1.06-.4 2.02-1.15 2.67-.73.62-1.72 1.1-2.77 1.01-.07-1.08.4-2.03 1.15-2.65.73-.61 1.71-1.09 2.77-1.03zM12.3 6.8c3.12 0 5.24 2.1 5.24 5.02 0 2.62-1.44 4.3-3.7 5.07-.9.3-1.76.04-2.78.04-1.02 0-1.75.28-2.64-.05-2.1-.67-3.8-2.9-3.8-5.97 0-1.77.6-3.18 1.6-4.2.9-.9 2.2-1.35 3.55-1.35.9 0 1.8.25 2.78.5.74.2 1.5.38 2.15.38z"/></svg>
+                Đăng nhập với Apple 
+              </button>
+            </div>
+
+            <!-- Divider -->
+            <div class="d-flex align-items-center mb-3">
+              <hr class="flex-grow-1"/>
+              <small class="mx-2 text-muted">hoặc</small>
+              <hr class="flex-grow-1"/>
+            </div>
+
             <form>
               <div class="mb-3">
                 <input type="email" class="form-control" placeholder="Email" required>
@@ -488,6 +560,7 @@
     </div>
   </div>
 </div>
+
 
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
