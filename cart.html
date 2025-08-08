@@ -7,29 +7,13 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Montserrat&display=swap" rel="stylesheet" />
   <style>
-    body {
-      font-family: 'Montserrat', sans-serif;
-      background-color: #f9f9f9;
-      color: #333;
-    }
-    h2.section-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 2.2rem;
-      margin-bottom: 2rem;
-      text-align: center;
-    }
-    .cart-img {
-      width: 80px;
-      height: auto;
-      border-radius: 10px;
-    }
-    .cart-total {
-      font-size: 1.2rem;
-      font-weight: bold;
-    }
-    .table > :not(caption) > * > * {
-      vertical-align: middle;
-    }
+    body { font-family: 'Montserrat', sans-serif; background-color: #f9f9f9; color: #333; }
+    h2.section-title { font-family: 'Playfair Display', serif; font-size: 2.2rem; margin-bottom: 2rem; text-align: center; }
+    .cart-img { width: 80px; height: auto; border-radius: 10px; }
+    .cart-total { font-size: 1.2rem; font-weight: bold; }
+    .table > :not(caption) > * > * { vertical-align: middle; }
+    /* delivery hidden by default */
+    #delivery-section { display: none; }
   </style>
 </head>
 <body>
@@ -42,9 +26,7 @@
       </button>
       <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
         <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link" href="thoitrang.html">Trang Chủ</a>
-          </li>
+          <li class="nav-item"><a class="nav-link" href="thoitrang.html">Trang Chủ</a></li>
         </ul>
       </div>
     </div>
@@ -84,20 +66,123 @@
             <strong class="cart-total" id="cart-total">0₫</strong>
           </li>
         </ul>
-        <button class="btn btn-dark w-100" onclick="checkout()">Tiến Hành Thanh Toán</button>
+        <div class="d-grid gap-2">
+          <button class="btn btn-dark w-100" id="btnCheckout" data-bs-toggle="modal" data-bs-target="#checkoutModal">Tiến Hành Thanh Toán</button>
+          <button class="btn btn-outline-secondary w-100" onclick="clearCart()">Xóa toàn bộ</button>
+        </div>
       </div>
     </div>
   </section>
 
+  <!-- Checkout Modal -->
+  <div class="modal fade" id="checkoutModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <form id="checkoutForm">
+          <div class="modal-header">
+            <h5 class="modal-title">Thanh toán & Giao hàng</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+          </div>
+          <div class="modal-body">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">Họ và tên <span class="text-danger">*</span></label>
+                <input required type="text" id="custName" class="form-control" placeholder="Nguyễn Văn A">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Số điện thoại <span class="text-danger">*</span></label>
+                <input required type="tel" id="custPhone" class="form-control" placeholder="0909 123 456">
+              </div>
+              <div class="col-12">
+                <label class="form-label">Địa chỉ giao hàng <span class="text-danger">*</span></label>
+                <input required type="text" id="custAddress" class="form-control" placeholder="Số nhà, đường, quận, thành phố">
+              </div>
+
+              <div class="col-12">
+                <label class="form-label">Phương thức thanh toán</label>
+                <div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="paymentMethod" id="payCash" value="cash" checked>
+                    <label class="form-check-label" for="payCash">Tiền mặt (COD)</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="paymentMethod" id="payCard" value="card">
+                    <label class="form-check-label" for="payCard">Thẻ ATM / Thẻ tín dụng (mô phỏng)</label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card fields (mô phỏng) -->
+              <div id="cardFields" class="col-12" style="display:none;">
+                <div class="row g-2">
+                  <div class="col-md-6">
+                    <label class="form-label">Số thẻ</label>
+                    <input type="text" id="cardNumber" class="form-control" placeholder="1234 5678 9012 3456">
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">Hạn dùng</label>
+                    <input type="text" id="cardExpiry" class="form-control" placeholder="MM/YY">
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">CVV</label>
+                    <input type="text" id="cardCVV" class="form-control" placeholder="123">
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12">
+                <label class="form-label">Ghi chú (không bắt buộc)</label>
+                <textarea id="orderNote" class="form-control" rows="2" placeholder="Ví dụ: giao buổi chiều..."></textarea>
+              </div>
+
+              <div class="col-12">
+                <div class="alert alert-light">
+                  <strong>Tổng đơn:</strong> <span id="modalTotal">0₫</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+            <button type="submit" class="btn btn-primary">Xác nhận đơn hàng</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delivery / Tracking (ẩn trước khi checkout) -->
+  <section id="delivery-section" class="container mt-5 mb-5">
+    <h3>🚚 Theo dõi đơn hàng</h3>
+    <div id="order-info" class="p-3 mb-3 border rounded bg-light"></div>
+
+    <h5>🛣️ Hành trình giao hàng</h5>
+    <div class="delivery-track position-relative mt-3 mb-3" style="height: 80px;">
+      <div class="track-line bg-secondary" style="height: 4px; position: absolute; top: 38px; left: 30px; right: 30px;"></div>
+
+      <div class="position-absolute text-center" style="left: 0;">
+        <div>🏭<br><small>Kho Q7</small></div>
+      </div>
+
+      <div class="position-absolute text-center" style="right: 0;">
+        <div>🏠<br><small>Nhà khách</small></div>
+      </div>
+
+      <div id="delivery-truck" class="position-absolute" style="top: 20px; left: 0; font-size: 28px;">🛻</div>
+    </div>
+
+    <div class="mt-3">
+      <p><strong>Trạng thái:</strong> <span id="status-text">Chưa có</span></p>
+    </div>
+  </section>
+
   <script>
-    function parsePrice(priceStr) {
-      return parseInt(priceStr.toString().replace(/[₫.,]/g, ""));
-    }
-
+    // Utility
     function formatPrice(number) {
-      return number.toLocaleString("vi-VN") + "₫";
+      return Number(number || 0).toLocaleString('vi-VN') + '₫';
     }
 
+    // CART RENDER
     function renderCart() {
       const cartBody = document.getElementById("cart-body");
       const cart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -110,9 +195,18 @@
 
         const row = `
           <tr>
-            <td><img src="${item.image}" class="cart-img" alt="${item.name}"></td>
-            <td>${item.name}</td>
-            <td>${item.quantity}</td>
+            <td><img src="${item.image || 'https://via.placeholder.com/80x80?text=No+Image'}" class="cart-img" alt="${item.name}" onerror="this.src='https://via.placeholder.com/80x80?text=No+Image'"></td>
+            <td class="text-start">
+              <strong>${item.name}</strong><br>
+              <small class="text-muted">${item.brand || ''}</small>
+            </td>
+            <td>
+              <div class="d-flex justify-content-center align-items-center">
+                <button class="btn btn-sm btn-outline-secondary me-2" onclick="updateQty(${index}, -1)">−</button>
+                <span>${item.quantity}</span>
+                <button class="btn btn-sm btn-outline-secondary ms-2" onclick="updateQty(${index}, 1)">+</button>
+              </div>
+            </td>
             <td>${formatPrice(item.price)}</td>
             <td>${formatPrice(itemTotal)}</td>
             <td><button class="btn btn-sm btn-danger" onclick="removeItem(${index})">Xóa</button></td>
@@ -122,6 +216,17 @@
       });
 
       document.getElementById("cart-total").innerText = formatPrice(total);
+      // update modal total if open
+      const modalTotal = document.getElementById("modalTotal");
+      if (modalTotal) modalTotal.innerText = formatPrice(total);
+    }
+
+    function updateQty(index, delta) {
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      if (!cart[index]) return;
+      cart[index].quantity = Math.max(1, (cart[index].quantity || 1) + delta);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      renderCart();
     }
 
     function removeItem(index) {
@@ -131,125 +236,175 @@
       renderCart();
     }
 
-    function checkout() {
-      const cart = JSON.parse(localStorage.getItem("cart")) || [];
-      if (cart.length === 0) {
-        alert("Giỏ hàng đang trống.");
-        return;
-      }
-      if (confirm("Xác nhận thanh toán?")) {
-        localStorage.removeItem("cart");
-        alert("Thanh toán thành công!");
-        renderCart();
-      }
+    function clearCart() {
+      if (!confirm('Xác nhận xóa toàn bộ giỏ hàng?')) return;
+      localStorage.removeItem('cart');
+      renderCart();
     }
 
-    // Thêm sản phẩm mẫu để thử
+    // Demo add sample
     function addSampleProduct() {
       const cart = JSON.parse(localStorage.getItem("cart")) || [];
       const sampleProduct = {
+        id: 'sample001',
         name: "Áo Blazer Zegna",
+        brand: "Zegna",
         price: 5500000,
         quantity: 1,
         image: "https://i.pinimg.com/564x/64/25/f5/6425f5c5b5f24c6c2fa9d174ae22a4cb.jpg"
       };
-      cart.push(sampleProduct);
+      const idx = cart.findIndex(i => i.id === sampleProduct.id);
+      if (idx !== -1) cart[idx].quantity += 1;
+      else cart.push(sampleProduct);
       localStorage.setItem("cart", JSON.stringify(cart));
       renderCart();
     }
 
+    // CHECKOUT LOGIC
+    document.addEventListener('DOMContentLoaded', function(){
+      renderCart();
+
+      // show/hide card fields when radio changed
+      document.querySelectorAll('input[name="paymentMethod"]').forEach(r => {
+        r.addEventListener('change', function(){
+          const cardFields = document.getElementById('cardFields');
+          if (this.value === 'card') cardFields.style.display = 'block';
+          else cardFields.style.display = 'none';
+        });
+      });
+
+      // pre-fill modal total on open
+      const checkoutModal = document.getElementById('checkoutModal');
+      checkoutModal.addEventListener('show.bs.modal', function () {
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const total = cart.reduce((s,i) => s + (i.price * i.quantity), 0);
+        document.getElementById('modalTotal').innerText = formatPrice(total);
+      });
+
+      // handle form submit
+      document.getElementById('checkoutForm').addEventListener('submit', function(e){
+        e.preventDefault();
+        handleCheckoutSubmit();
+      });
+    });
+
+    function handleCheckoutSubmit() {
+      const name = document.getElementById('custName').value.trim();
+      const phone = document.getElementById('custPhone').value.trim();
+      const address = document.getElementById('custAddress').value.trim();
+      const payment = document.querySelector('input[name="paymentMethod"]:checked').value;
+      const note = document.getElementById('orderNote').value.trim();
+
+      if (!name || !phone || !address) {
+        alert('Vui lòng điền đầy đủ họ tên, số điện thoại và địa chỉ.');
+        return;
+      }
+
+      if (payment === 'card') {
+        // basic check (mô phỏng)
+        const cardNumber = document.getElementById('cardNumber').value.trim();
+        const cardExpiry = document.getElementById('cardExpiry').value.trim();
+        const cardCVV = document.getElementById('cardCVV').value.trim();
+        if (!cardNumber || !cardExpiry || !cardCVV) {
+          if(!confirm('Bạn chưa nhập thông tin thẻ. Tiếp tục mô phỏng thanh toán?')) return;
+        }
+      }
+
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      if (cart.length === 0) { alert('Giỏ hàng đang trống.'); return; }
+
+      const total = cart.reduce((s,i) => s + (i.price * i.quantity), 0);
+      const orderId = 'NOIR' + Date.now();
+
+      const order = {
+        id: orderId,
+        customer: { name, phone, address },
+        items: cart,
+        total,
+        paymentMethod: payment,
+        note,
+        status: 'Đã xác nhận',
+        createdAt: new Date().toISOString()
+      };
+
+      // save orders list
+      const orders = JSON.parse(localStorage.getItem('orders')) || [];
+      orders.push(order);
+      localStorage.setItem('orders', JSON.stringify(orders));
+
+      // clear cart
+      localStorage.removeItem('cart');
+
+      // close modal
+      const modalEl = document.getElementById('checkoutModal');
+      const modal = bootstrap.Modal.getInstance(modalEl);
+      modal.hide();
+
+      // show confirmation and start delivery tracking
+      alert('Đặt hàng thành công! Mã đơn: ' + orderId);
+      renderCart();
+      startDeliverySimulation(order);
+    }
+
+    // DELIVERY SIMULATION
+    let truckInterval = null;
+    let statusInterval = null;
+    function startDeliverySimulation(order) {
+      // populate order info
+      document.getElementById('order-info').innerHTML = `
+        <p><strong>Mã đơn:</strong> ${order.id}</p>
+        <p><strong>Người nhận:</strong> ${order.customer.name} — ${order.customer.phone}</p>
+        <p><strong>Địa chỉ:</strong> ${order.customer.address}</p>
+        <p><strong>Thanh toán:</strong> ${order.paymentMethod === 'cash' ? 'Tiền mặt (COD)' : 'Thẻ (mô phỏng)'}</p>
+        <p><strong>Tổng:</strong> ${formatPrice(order.total)}</p>
+      `;
+
+      // show delivery section
+      document.getElementById('delivery-section').style.display = 'block';
+      document.getElementById('status-text').innerText = 'Đã xác nhận';
+
+      // reset truck
+      const truck = document.getElementById('delivery-truck');
+      let progress = 0;
+      truck.style.left = '0';
+
+      if (truckInterval) clearInterval(truckInterval);
+      truckInterval = setInterval(() => {
+        if (progress <= 100) {
+          truck.style.left = `calc(${progress}% - 15px)`;
+          progress += 0.8; // tốc độ
+        } else {
+          clearInterval(truckInterval);
+        }
+      }, 80);
+
+      // update statuses
+      const statuses = [
+        "Đã xác nhận",
+        "Đã đóng gói",
+        "Đã bàn giao cho đơn vị vận chuyển",
+        "Đang giao",
+        "Giao thành công"
+      ];
+      let currentStatus = 0;
+      if (statusInterval) clearInterval(statusInterval);
+      statusInterval = setInterval(() => {
+        if (currentStatus < statuses.length) {
+          document.getElementById('status-text').innerText = statuses[currentStatus];
+          currentStatus++;
+        } else {
+          clearInterval(statusInterval);
+        }
+      }, 4000);
+    }
+
+    // initial render
     renderCart();
   </script>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <!-- Địa chỉ cửa hàng -->
-<section class="container mt-5">
-  <h3>📍 Địa chỉ cửa hàng</h3>
-  <p>NOIR VOYAGE Flagship Store: 123 Lý Tự Trọng, Quận 1, TP.HCM</p>
-  <div style="width: 100%; height: 400px;">
-    <iframe
-      src="https://www.google.com/maps?q=123 Lý Tự Trọng, Quận 1, Hồ Chí Minh&output=embed"
-      width="100%"
-      height="100%"
-      style="border:0;"
-      allowfullscreen=""
-      loading="lazy">
-    </iframe>
-  </div>
-</section>
-
-<!-- Thông tin đơn hàng -->
-<section class="container mt-5 mb-5">
-  <h3>🚚 Thông Tin Đơn Hàng Đang Tới</h3>
-  <div id="order-tracking" class="p-4 border rounded shadow-sm bg-light">
-    <p><strong>Mã đơn hàng:</strong> #NOIR123456</p>
-    <p><strong>Trạng thái:</strong> <span id="status-text">Đang giao</span></p>
-    <p><strong>Đơn vị vận chuyển:</strong> Giao Hàng Nhanh</p>
-    <p><strong>Dự kiến giao:</strong> Thứ 5, 08/08/2025</p>
-    <p><strong>Vị trí hiện tại:</strong> Kho Trung Chuyển Quận 7</p>
-  </div>
-</section>
-<!-- Hành trình giao hàng -->
-<section class="container mt-4 mb-5">
-  <h4>🛣️ Hành Trình Giao Hàng</h4>
-  <div class="delivery-track position-relative mt-3 mb-3" style="height: 80px;">
-    <div class="track-line bg-secondary" style="height: 4px; position: absolute; top: 38px; left: 30px; right: 30px;"></div>
-    
-    <!-- Điểm bắt đầu -->
-    <div class="position-absolute text-center" style="left: 0;">
-      <div>🏭<br><small>Kho Q7</small></div>
-    </div>
-    
-    <!-- Điểm kết thúc -->
-    <div class="position-absolute text-center" style="right: 0;">
-      <div>🏠<br><small>Nhà khách</small></div>
-    </div>
-
-    <!-- Xe giao hàng -->
-    <div id="delivery-truck" class="position-absolute" style="top: 20px; left: 0; font-size: 28px;">
-      🛻
-    </div>
-  </div>
-</section>
-<script>
-  let truck = document.getElementById("delivery-truck");
-  let progress = 0;
-
-  function moveTruck() {
-    if (progress <= 100) {
-      truck.style.left = `calc(${progress}% - 15px)`; // -15px để căn giữa biểu tượng
-      progress += 1; // tăng tốc độ tùy chỉnh tại đây
-    }
-  }
-
-  setInterval(moveTruck, 100); // cập nhật vị trí mỗi 100ms
-</script>
-
-<!-- Script mô phỏng cập nhật trạng thái -->
-<script>
-  const statuses = [
-    "Đã xác nhận",
-    "Đã đóng gói",
-    "Đã bàn giao cho đơn vị vận chuyển",
-    "Đang giao",
-    "Giao thành công"
-  ];
-
-  let currentStatus = 0;
-  const statusSpan = document.getElementById("status-text");
-
-  function updateStatus() {
-    if (currentStatus < statuses.length) {
-      statusSpan.innerText = statuses[currentStatus];
-      currentStatus++;
-    }
-  }
-
-  setInterval(updateStatus, 4000); // cập nhật mỗi 4 giây
-</script>
-
 </body>
-</html> 
+</html>
 
 
 
