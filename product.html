@@ -36,28 +36,22 @@
     <div id="products-grid" class="row g-4"></div>
   </div>
 
-  <!-- optional: your external product.js (if you have it) -->
   <script src="product.js"></script>
 
   <script>
-    // Nếu product.js có biến `products` dạng object categories, flatten nó.
-    // Nếu không có, dùng fallback sampleProducts.
     const fallbackProducts = [
-      { id: 'p301', name: "Túi xách Chanel", brand:"Chanel", price:188060000, image:"https://www.chanel.com/images/as///f_auto,q_auto:good,dpr_1.1/w_1600/-76161100.jpg", description:"Da bê hiệu ứng hạt" },
-      { id: 'p302', name: "Áo khoác Chanel", brand:"Chanel", price:269160000, image:"https://www.chanel.com/images/as///f_auto,q_auto:good,dpr_1.1/w_960/-77458721.jpg", description:"Zipper Jacket – Look 1" },
-      { id: 'p303', name: "Valentino Blazer", brand:"Valentino", price:32000000, image:"https://valentino-cdn.thron.com//delivery/public/image/valentino/5cdd9f34-9c1e-44f7-9d84-09f01711cb12/ewl5wb/std/1000x0/post?format=auto&quality=auto-medium", description:"Runway Blazer" }
+      { id: 'p301', name: "Túi xách Chanel", brand:"Chanel", price:188060000, image:"https://www.chanel.com/images/as///f_auto,q_auto:good,dpr_1.1/w_1600/-76161100.jpg", description:"Da bê hiệu ứng hạt", category: "other" },
+      { id: 'p302', name: "Áo khoác Chanel", brand:"Chanel", price:269160000, image:"https://www.chanel.com/images/as///f_auto,q_auto:good,dpr_1.1/w_960/-77458721.jpg", description:"Zipper Jacket – Look 1", category: "clothing" },
+      { id: 'p303', name: "Giày Valentino", brand:"Valentino", price:32000000, image:"https://valentino-cdn.thron.com//delivery/public/image/valentino/5cdd9f34-9c1e-44f7-9d84-09f01711cb12/ewl5wb/std/1000x0/post?format=auto&quality=auto-medium", description:"Runway Shoes", category: "shoes" }
     ];
 
-    // parse price string like "48.996.700 VNĐ" -> number 48996700
     function parsePriceString(s){
       if (typeof s === 'number') return s;
       return Number(String(s).replace(/[^\d]/g,'')) || 0;
     }
 
-    // getProducts: prefer global `products` (from product.js), else fallback
     function getProductsFromGlobal(){
       if (typeof products !== 'undefined') {
-        // products in product.js is an object of arrays
         try {
           const arr = Object.values(products).flat();
           return arr.map((p, i) => {
@@ -67,7 +61,8 @@
               brand: p.brand || '',
               price: parsePriceString(p.price),
               image: p.image || '',
-              description: p.description || ''
+              description: p.description || '',
+              category: p.category || 'other'
             };
           });
         } catch(e){
@@ -80,11 +75,27 @@
     }
 
     const allProducts = getProductsFromGlobal();
-
     const grid = document.getElementById('products-grid');
+
     allProducts.forEach(p => {
       const col = document.createElement('div');
       col.className = 'col-md-4';
+
+      // Xác định size options theo category
+      let sizeOptions = '';
+      if (p.category === 'clothing') {
+        sizeOptions = `<option value="">-- Chọn size --</option>
+                       <option value="S">S</option>
+                       <option value="M">M</option>
+                       <option value="L">L</option>
+                       <option value="XL">XL</option>`;
+      } else if (p.category === 'shoes') {
+        sizeOptions = `<option value="">-- Chọn size --</option>
+                       <option value="39">39</option>
+                       <option value="40">40</option>
+                       <option value="41">41</option>
+                       <option value="42">42</option>`;
+      }
 
       col.innerHTML = `
         <div class="card h-100">
@@ -93,9 +104,18 @@
             <h5 class="card-title">${p.name}</h5>
             <p class="text-desc">${p.description || p.brand}</p>
             <p class="text-price">${p.price.toLocaleString('vi-VN')}₫</p>
+            
+            ${sizeOptions ? `
+              <div class="mb-3">
+                <select id="size-${p.id}" class="form-select form-select-sm">
+                  ${sizeOptions}
+                </select>
+              </div>
+            ` : ''}
+
             <div class="d-grid gap-2">
-              <button class="btn btn-dark" onclick='addToCart(${JSON.stringify(p)})'>Thêm vào giỏ hàng</button>
-              <button class="btn btn-outline-primary" onclick='buyNow(${JSON.stringify(p)})'>Mua ngay</button>
+              <button class="btn btn-dark" onclick='addToCartWithSize(${JSON.stringify(p)})'>Thêm vào giỏ hàng</button>
+              <button class="btn btn-outline-primary" onclick='buyNowWithSize(${JSON.stringify(p)})'>Mua ngay</button>
             </div>
           </div>
         </div>
@@ -103,17 +123,39 @@
       grid.appendChild(col);
     });
 
-    /* ---------- Cart functions (store in localStorage) ---------- */
     function getCart(){ try { return JSON.parse(localStorage.getItem('cart')) || []; } catch(e){ return []; } }
     function setCart(cart){ localStorage.setItem('cart', JSON.stringify(cart)); }
 
-    function addToCart(product){
-      if (!product || !product.id) {
-        alert('Sản phẩm không hợp lệ');
-        return;
+    function addToCartWithSize(product){
+      let size = '';
+      if (product.category === 'clothing' || product.category === 'shoes') {
+        size = document.getElementById(`size-${product.id}`).value;
+        if (!size) {
+          alert('Vui lòng chọn size trước khi thêm vào giỏ!');
+          return;
+        }
       }
+      product.size = size;
+      addToCart(product);
+    }
+
+    function buyNowWithSize(product){
+      let size = '';
+      if (product.category === 'clothing' || product.category === 'shoes') {
+        size = document.getElementById(`size-${product.id}`).value;
+        if (!size) {
+          alert('Vui lòng chọn size trước khi mua!');
+          return;
+        }
+      }
+      product.size = size;
+      addToCart(product);
+      window.location.href = 'cart.html';
+    }
+
+    function addToCart(product){
       const cart = getCart();
-      const idx = cart.findIndex(i => i.id === product.id);
+      const idx = cart.findIndex(i => i.id === product.id && i.size === product.size);
       if (idx !== -1){
         cart[idx].quantity = (cart[idx].quantity || 0) + 1;
       } else {
@@ -123,17 +165,12 @@
           brand: product.brand || '',
           price: Number(product.price) || 0,
           image: product.image || '',
+          size: product.size || '',
           quantity: 1
         });
       }
       setCart(cart);
       alert('Đã thêm vào giỏ hàng!');
-    }
-
-    function buyNow(product){
-      addToCart(product);
-      // redirect to cart page
-      window.location.href = 'cart.html';
     }
   </script>
 
